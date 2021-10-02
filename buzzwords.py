@@ -19,6 +19,7 @@ buzzword_list = [
     "convert", "latest", "state", "hollistic", "brain", "storm",
     "brainstorming", "google", "neural", "network", "sponsor", "sponsored",
     "sponsorship", "design", "prototype", "fast", "prototyping", "paradigm",
-    "remote", "testing"
+    "remote", "testing", "hybrid", "digital", "influential", "mobile",
+    "virtual", "container", "contained", "contain"
 ]
 
