@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 import time
-import os
+#import os
 
 def take_action(direction):
     if direction not in ["up", "down"]:
@@ -15,7 +15,7 @@ def take_action(direction):
     if direction == "up":
         #print "up"
         x_dir.write ("0\n")
-        os.system("aplay -D bluealsa:DEV=B8:D5:0B:B2:31:5C,PROFILE=a2dp bullshit.wav &")
+        #os.system("aplay -D bluealsa:DEV=B8:D5:0B:B2:31:5C,PROFILE=a2dp bullshit.wav &")
     else:
         #print "down"
         x_dir.write ("1\n")
