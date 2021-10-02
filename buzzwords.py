@@ -17,6 +17,8 @@ buzzword_list = [
     "optimization", "optimized", "optimize", "optimum", "organization",
     "organizational", "modern", "geek", "next", "computer", "science",
     "convert", "latest", "state", "hollistic", "brain", "storm",
-    "brainstorming", "google", "neural", "network"
+    "brainstorming", "google", "neural", "network", "sponsor", "sponsored",
+    "sponsorship", "design", "prototype", "fast", "prototyping", "paradigm",
+    "remote", "testing"
 ]
 
