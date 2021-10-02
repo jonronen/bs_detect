@@ -24,7 +24,3 @@
 
 /bin/sleep 1
 
-echo -e "power up\nconnect b8:d5:0b:b2:31:5c\n quit"|bluetoothctl
-
-/bin/sleep 10
-
