@@ -13,15 +13,15 @@ import speech_recognition as sr
 import bullshit_action as ba
 import buzzwords
 
-ba.take_action("down")
 
 bullShitList = buzzwords.buzzword_list
-BS_THRESHOLD = 10
+BS_THRESHOLD = 5
 
 r = sr.Recognizer()
 audio_queue = Queue()
 
 os.system("./bullshit_start.sh")
+ba.take_action("down")
 
 # Local func to record audio
 def record_chunk(f_name):
@@ -84,7 +84,7 @@ def recognize_worker():
 
 				# Compare words
 				for wrd in wordList:
-					if wrd in str(bullShitList):
+					if str(wrd).lower() in str(bullShitList).lower():
 						bsScore = bsScore + 1
 						print("BULLSHIT word #{}!!!".format(bsScore))
 
