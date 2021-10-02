@@ -6,11 +6,14 @@ import os
 import pyaudio
 import time
 import wave
+from sys import exit
 from threading import Thread
 from queue import Queue
 import speech_recognition as sr
 import bullshit_action as ba
 import buzzwords
+
+ba.take_action("down")
 
 bullShitList = buzzwords.buzzword_list
 BS_THRESHOLD = 10
@@ -76,21 +79,20 @@ def recognize_worker():
 			with sound as source:
 				audio = r.record(source)
 				data = r.recognize_google(audio)
-				print("\n \n You SAID: " + data)
-
+				print("\n \n You SAID: " + data + "\n\n")
 				wordList = data.split(' ')
-				print("\n \n Word List: " + str(wordList))
 
 				# Compare words
 				for wrd in wordList:
 					if wrd in str(bullShitList):
 						bsScore = bsScore + 1
-						print("BULLSHIT word!!!")
+						print("BULLSHIT word #{}!!!".format(bsScore))
 
 				if bsScore > BS_THRESHOLD:
 					ba.take_action("up")
 					bsScore = 0
 					time.sleep(10)
+					ba.take_action("down")
 
 
 		except sr.UnknownValueError:
@@ -98,7 +100,6 @@ def recognize_worker():
 		except sr.RequestError as e:
 			print("Could not request results from Google Speech Recognition service; {0}".format(e))
 
-		print("Deleting file: {}".format(f_name))
 		os.system("rm {}".format(f_name))
 
 	audio_queue.task_done()  # mark the audio processing job as completed in the queue
@@ -122,8 +123,9 @@ try:
 
 except KeyboardInterrupt:  # allow Ctrl + C to shut down the program
 	print("\n Interrupted!!! \n")
+	os.system("rm -f test_filename_*")
+	audio_queue.join()  # block until all current audio processing jobs are done
+	audio_queue.put(None)  # tell the recognize_thread to stop
+	recognize_thread.join()  # wait for the recognize_thread to actually stop
+	os.system("rm -rf __pycache__")
 	pass
-
-audio_queue.join()  # block until all current audio processing jobs are done
-audio_queue.put(None)  # tell the recognize_thread to stop
-recognize_thread.join()  # wait for the recognize_thread to actually stop
