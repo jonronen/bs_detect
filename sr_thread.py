@@ -4,6 +4,7 @@
 import subprocess
 import os
 import pyaudio
+import time
 import wave
 from threading import Thread
 from queue import Queue
@@ -12,6 +13,7 @@ import bullshit_action as ba
 import buzzwords
 
 bullShitList = buzzwords.buzzword_list
+BS_THRESHOLD = 10
 
 r = sr.Recognizer()
 audio_queue = Queue()
@@ -87,6 +89,9 @@ def recognize_worker():
 
 				if bsScore > BS_THRESHOLD:
 					ba.take_action("up")
+					bsScore = 0
+					time.sleep(10)
+
 
 		except sr.UnknownValueError:
 			print("Google Speech Recognition could not understand audio")
