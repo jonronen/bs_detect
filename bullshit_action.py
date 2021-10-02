@@ -1,11 +1,10 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 import time
-import thread
 #import os
 
 def take_action(direction):
     if direction not in ["up", "down"]:
-        print "Unsupported direction %s, please choose up or down" % direction
+        print("Unsupported direction %s, please choose up or down" % direction)
         return
 
     mot_ctrl = open ("/sys/class/gpio/gpio16/value", "wt")
@@ -51,7 +50,7 @@ if __name__ == "__main__":
     import sys
 
     if len(sys.argv) < 2:
-        print "Usage: %s DIRECTION" % sys.argv[0]
+        print("Usage: %s DIRECTION" % sys.argv[0])
         sys.exit(-1)
 
     direction = sys.argv[1].lower().strip()
