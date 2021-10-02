@@ -15,6 +15,8 @@ buzzword_list = [
     "integration", "real", "time", "repurposing", "targeting", "leader",
     "leading", "growth", "growing", "shiny", "internet", "issue",
     "optimization", "optimized", "optimize", "optimum", "organization",
-    "organizational"
+    "organizational", "modern", "geek", "next", "computer", "science",
+    "convert", "latest", "state", "hollistic", "brain", "storm",
+    "brainstorming", "google", "neural", "network"
 ]
 
