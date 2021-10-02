@@ -1,0 +1,22 @@
+How to connect:
+* Hotspot: ssid:ajon30     passwd: babkabab
+* RPi MAC address: b8:27:eb:71:39:5
+* arp -a --> gives you MACs vs. IPs. Find the RPi IP.
+* ssh to pi@<Rpi_IP> --> passwd: raspberry
+* cd bs_detect
+* ./sr_threay.py
+
+
+
+How to connect new earphones to Rpi (via Bluetooth)
+* bluetoothctl
+* set device to pairing mode
+* scan on
+* find your device MAC
+* pair <device mac>
+* trust <device mac>
+* connect <device mac>
+* Nir's earphones MAC: 14:3F:A6:99:39:0A
+* exit from bluetoothctl (exit)
+* vim /etc/asound.conf
+* add a new entry similar to "mic" with MAC of the device you want
