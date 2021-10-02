@@ -8,9 +8,15 @@ import wave
 from threading import Thread
 from queue import Queue
 import speech_recognition as sr
+import bullshit_action as ba
+import buzzwords
+
+bullShitList = buzzwords.buzzword_list
 
 r = sr.Recognizer()
 audio_queue = Queue()
+
+os.system("./bullshit_start.sh")
 
 # Local func to record audio
 def record_chunk(f_name):
@@ -52,6 +58,7 @@ def record_chunk(f_name):
 	wavefile.close()
 
 def recognize_worker():
+	bsScore = 0
 	# this runs in a background thread
 	while True:
 		f_name = audio_queue.get()  # retrieve the next audio processing job from the main thread
@@ -67,9 +74,20 @@ def recognize_worker():
 			with sound as source:
 				audio = r.record(source)
 				data = r.recognize_google(audio)
-				print("Google Speech Recognition thinks you said " + data)
-				command = "echo '{}' >> logfile.txt".format(data)
-				os.system(command)
+				print("\n \n You SAID: " + data)
+
+				wordList = data.split(' ')
+				print("\n \n Word List: " + str(wordList))
+
+				# Compare words
+				for wrd in wordList:
+					if wrd in str(bullShitList):
+						bsScore = bsScore + 1
+						print("BULLSHIT word!!!")
+
+				if bsScore > BS_THRESHOLD:
+					ba.take_action("up")
+
 		except sr.UnknownValueError:
 			print("Google Speech Recognition could not understand audio")
 		except sr.RequestError as e:
@@ -79,6 +97,7 @@ def recognize_worker():
 		os.system("rm {}".format(f_name))
 
 	audio_queue.task_done()  # mark the audio processing job as completed in the queue
+
 
 # start a new thread to recognize audio, while this thread focuses on listening
 recognize_thread = Thread(target=recognize_worker)
