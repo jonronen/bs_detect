@@ -1,55 +1,59 @@
 #! /usr/bin/env python
 import time
 import thread
-import sys
-import os
+#import os
 
-if len(sys.argv) < 2:
-    print "Usage: %s DIRECTION" % sys.argv[0]
-    sys.exit(-1)
+def take_action(direction):
+    if direction not in ["up", "down"]:
+        print "Unsupported direction %s, please choose up or down" % direction
+        return
 
-direction = sys.argv[1].lower().strip()
+    mot_ctrl = open ("/sys/class/gpio/gpio16/value", "wt")
 
-if direction not in ["up", "down"]:
-    print "Unsupported direction %s, please choose up or down" % sys.argv[1]
-    sys.exit(-1)
+    x_step = open ("/sys/class/gpio/gpio5/value", "wt")
+    x_dir = open ("/sys/class/gpio/gpio6/value", "wt")
 
-mot_ctrl = open ("/sys/class/gpio/gpio16/value", "wt")
+    if direction == "up":
+        #print "up"
+        x_dir.write ("0\n")
+        #os.system("aplay -D bluealsa:DEV=B8:D5:0B:B2:31:5C,PROFILE=a2dp bullshit.wav &")
+    else:
+        #print "down"
+        x_dir.write ("1\n")
+    x_dir.flush ()
+    mot_ctrl.write ("0\n")
+    mot_ctrl.flush ()
 
-x_step = open ("/sys/class/gpio/gpio5/value", "wt")
-x_dir = open ("/sys/class/gpio/gpio6/value", "wt")
+    steps = 0
 
-if direction == "up":
-    print "up"
-    x_dir.write ("0\n")
-    os.system("aplay -D bluealsa:DEV=B8:D5:0B:B2:31:5C,PROFILE=a2dp bullshit.wav &")
-else:
-    print "down"
-    x_dir.write ("1\n")
-x_dir.flush ()
-mot_ctrl.write ("0\n")
-mot_ctrl.flush ()
+    try:
+        while steps < 1000:
+            # first pause for setting the step high
+            time.sleep (0.001)
 
-steps = 0
+            x_step.write ("1\n")
+            x_step.flush ()
 
-try:
-    while steps < 1000:
-        # first pause for setting the step high
-        time.sleep (0.001)
+            # now pause for setting the step low
+            time.sleep (0.001)
 
-        x_step.write ("1\n")
-        x_step.flush ()
+            x_step.write ("0\n")
+            x_step.flush ()
 
-        # now pause for setting the step low
-        time.sleep (0.001)
+            steps += 1
+    except KeyboardInterrupt:
+        pass
 
-        x_step.write ("0\n")
-        x_step.flush ()
+    mot_ctrl.write ("1\n")
+    mot_ctrl.flush ()
 
-        steps += 1
-except KeyboardInterrupt:
-    pass
+if __name__ == "__main__":
+    import sys
 
-mot_ctrl.write ("1\n")
-mot_ctrl.flush ()
+    if len(sys.argv) < 2:
+        print "Usage: %s DIRECTION" % sys.argv[0]
+        sys.exit(-1)
+
+    direction = sys.argv[1].lower().strip()
+    take_action(direction)
 
